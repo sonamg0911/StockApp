@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:stock_app/data/model/stock_response.dart';
-import 'package:stock_app/presentation/utils/tag_color_names.dart';
+import 'package:stock_app/presentation/utils/enums/criteria_type.dart';
+import 'package:stock_app/presentation/utils/enums/tag_color_names.dart';
+import 'package:stock_app/presentation/utils/enums/variable_type.dart';
 
 class StockDetailPage extends StatefulWidget {
   static const path = "/details";
@@ -44,37 +46,64 @@ class StockDetailPageState extends State<StockDetailPage> {
           ),
         ],
       ),
-      body: ListView.builder(
-        itemCount: stock.criteria?.length,
+      body: ListView.separated(
+        itemCount: stock.criteria?.length ?? 0,
+        separatorBuilder: (context, index) {
+          return Container(
+            alignment: Alignment.centerLeft,
+            padding: const EdgeInsets.symmetric(horizontal: 12),
+            child: const Text(
+              'and',
+              style: TextStyle(fontSize: 10),
+            ),
+          );
+        },
         itemBuilder: (context, itemNumber) {
           final criteria = stock.criteria?.elementAt(itemNumber);
-          return GestureDetector(
-            onTap: () {
-              Navigator.of(context)
-                  .pushNamed(StockDetailPage.path, arguments: stock);
-            },
-            child: Container(
-              margin: const EdgeInsets.symmetric(vertical: 10, horizontal: 10),
-              padding: const EdgeInsets.symmetric(
-                vertical: 5,
-                horizontal: 10,
+          return Container(
+            margin: const EdgeInsets.symmetric(vertical: 10, horizontal: 10),
+            padding: const EdgeInsets.symmetric(
+              vertical: 5,
+              horizontal: 10,
+            ),
+            decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(6.0),
+              border: Border.all(
+                color: Colors.black,
+                width: 1,
               ),
-              decoration: BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.circular(6.0),
-                border: Border.all(
-                  color: Colors.black,
-                  width: 2,
-                ),
-              ),
-              child: Text(
-                criteria?.text ?? '',
-                style: const TextStyle(fontSize: 16),
-              ),
+            ),
+            child: Text(
+              criteria?.type == CriteriaType.plainText.type
+                  ? criteria?.text ?? ''
+                  : getVariableText(criteria?.text ?? '', criteria?.variable),
+              style: const TextStyle(fontSize: 16),
             ),
           );
         },
       ),
     );
+  }
+
+  String getVariableText(String input, Map<String, dynamic>? valueMap) {
+    String result = input;
+
+    valueMap?.forEach((key, value) {
+      if (value.containsKey('type')) {
+        if (value['type'] == VariableType.value.name) {
+          if(value.containsKey('values') && value['values'].isNotEmpty) {
+            result = result.replaceAll(key, value['values'].elementAt(0).toString());
+          }
+        } else {
+          if (value.containsKey('default_value')) {
+            result =
+                result.replaceAll(key, value['default_value'].toString());
+          }
+        }
+      }
+    });
+
+    return result;
   }
 }

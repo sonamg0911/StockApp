@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:stock_app/data/model/stock_response.dart';
-import 'package:stock_app/presentation/utils/tag_color_names.dart';
+import 'package:stock_app/presentation/utils/enums/tag_color_names.dart';
 
 class StockListItem extends StatelessWidget {
   const StockListItem({super.key, required this.stock});
