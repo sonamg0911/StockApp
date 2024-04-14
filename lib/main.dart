@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:stock_app/presentation/pages/stock_details/stock_details_page.dart';
+import 'package:stock_app/presentation/pages/stock_indicator/stock_indicator_page.dart';
 import 'package:stock_app/presentation/pages/stock_listing/stock_listing_page.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:stock_app/presentation/pages/stock_value/stock_value_page.dart';
 
 import 'di/di_config.dart';
 
@@ -35,6 +37,8 @@ class MyApp extends StatelessWidget {
       routes: {
         StockListingPage.path: (_) => const StockListingPage(),
         StockDetailPage.path: (_) => const StockDetailPage(),
+        StockValuePage.path: (_) => const StockValuePage(),
+        StockIndicatorPage.path: (_) => const StockIndicatorPage(),
       },
     );
   }
