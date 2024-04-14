@@ -33,6 +33,7 @@ class StockListingPageState extends ConsumerState<StockListingPage> {
 
     return Scaffold(
         appBar: AppBar(
+          titleSpacing: 10,
           title: const Text(StockAppString.stocks,
               style: TextStyle(
                 fontWeight: FontWeight.bold,
